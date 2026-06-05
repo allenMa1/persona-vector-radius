@@ -7,7 +7,7 @@ from tqdm import tqdm
 
 from .artifacts import TraitArtifact
 from .config import RunConfig
-from .io_utils import read_jsonl, write_jsonl
+from .io_utils import read_json, read_jsonl, write_jsonl
 from .judge import JudgeClient
 from .runtime import ModelRuntime
 
@@ -47,9 +47,18 @@ def generate_extraction_records(
     config: RunConfig,
     runtime: ModelRuntime,
     artifacts: dict[str, TraitArtifact],
+    traits: list[str] | None = None,
+    append: bool = False,
 ) -> None:
+    target_traits = traits or config.traits
     records: list[dict[str, Any]] = []
-    for trait_id in config.traits:
+    if append:
+        records = [
+            record
+            for record in read_jsonl(config.extraction_records_path)
+            if record.get("trait_id") not in set(target_traits)
+        ]
+    for trait_id in target_traits:
         for job in tqdm(build_extraction_jobs(artifacts[trait_id]), desc=f"extract {trait_id}"):
             messages = runtime.make_messages(job["system_instruction"], job["question"])
             response = runtime.generate_response(messages)
@@ -67,9 +76,22 @@ def judge_extraction_records(
     config: RunConfig,
     judge: JudgeClient,
     artifacts: dict[str, TraitArtifact],
+    traits: list[str] | None = None,
+    append: bool = False,
 ) -> None:
+    target_traits = set(traits or config.traits)
     judged: list[dict[str, Any]] = []
-    records = read_jsonl(config.extraction_records_path)
+    if append:
+        judged = [
+            record
+            for record in read_jsonl(config.judged_extraction_records_path)
+            if record.get("trait_id") not in target_traits
+        ]
+    records = [
+        record
+        for record in read_jsonl(config.extraction_records_path)
+        if record.get("trait_id") in target_traits
+    ]
     for record in tqdm(records, desc="judge extraction"):
         artifact = artifacts[record["trait_id"]]
         trait = judge.score_trait(artifact, record["question"], record["response"])
@@ -110,12 +132,18 @@ def retained_pairs(config: RunConfig) -> dict[str, list[dict[str, dict[str, Any]
     return retained
 
 
-def extract_trait_vectors(config: RunConfig, runtime: ModelRuntime) -> None:
+def extract_trait_vectors(
+    config: RunConfig,
+    runtime: ModelRuntime,
+    traits: list[str] | None = None,
+) -> None:
     import torch
 
+    target_traits = traits or config.traits
     retained = retained_pairs(config)
-    metadata: dict[str, Any] = {}
-    for trait_id in config.traits:
+    metadata_path = config.vectors_dir / "vector_metadata.json"
+    metadata: dict[str, Any] = read_json(metadata_path) if metadata_path.exists() else {}
+    for trait_id in target_traits:
         pairs = retained.get(trait_id, [])
         if len(pairs) < config.min_pairs_per_trait:
             raise RuntimeError(
@@ -161,4 +189,3 @@ def extract_trait_vectors(config: RunConfig, runtime: ModelRuntime) -> None:
     from .io_utils import write_json
 
     write_json(config.vectors_dir / "vector_metadata.json", metadata)
-

@@ -54,6 +54,25 @@ tst --config configs/default.json analyze
 
 If a stage fails, fix that stage and rerun it. Previous stages write cached files under `runs/`.
 
+## Rerunning One Failed Trait
+
+If one trait fails extraction filtering, keep the successful traits and replace only that trait:
+
+```bash
+tst --config configs/default.json write-builtin-artifacts
+tst --config configs/default.json generate-extraction --traits evil --append
+tst --config configs/default.json judge-extraction --traits evil --append
+tst --config configs/default.json extract-vectors --traits evil
+```
+
+Then continue:
+
+```bash
+tst --config configs/default.json normalize
+tst --config configs/default.json evaluate
+tst --config configs/default.json analyze
+```
+
 ## Interface Between Machines
 
 The important portable outputs are:
@@ -100,4 +119,3 @@ export OPENROUTER_API_KEY="..."
 ```
 
 Do not place it in configs, source files, notebooks, or logs.
-

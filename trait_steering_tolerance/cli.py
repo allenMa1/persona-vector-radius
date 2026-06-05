@@ -21,9 +21,16 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("write-builtin-artifacts")
     sub.add_parser("smoke-openrouter")
     sub.add_parser("smoke-model")
-    sub.add_parser("generate-extraction")
-    sub.add_parser("judge-extraction")
-    sub.add_parser("extract-vectors")
+    generate_extraction = sub.add_parser("generate-extraction")
+    generate_extraction.add_argument("--traits", nargs="*", default=None)
+    generate_extraction.add_argument("--append", action="store_true")
+
+    judge_extraction = sub.add_parser("judge-extraction")
+    judge_extraction.add_argument("--traits", nargs="*", default=None)
+    judge_extraction.add_argument("--append", action="store_true")
+
+    extract_vectors = sub.add_parser("extract-vectors")
+    extract_vectors.add_argument("--traits", nargs="*", default=None)
     sub.add_parser("normalize")
     sub.add_parser("evaluate")
     sub.add_parser("analyze")
@@ -84,7 +91,9 @@ def main(argv: list[str] | None = None) -> int:
 
         artifacts = load_artifacts(config)
         runtime = ModelRuntime(config)
-        generate_extraction_records(config, runtime, artifacts)
+        generate_extraction_records(
+            config, runtime, artifacts, traits=args.traits, append=args.append
+        )
         return 0
 
     if args.command == "judge-extraction":
@@ -93,7 +102,9 @@ def main(argv: list[str] | None = None) -> int:
 
         artifacts = load_artifacts(config)
         judge = JudgeClient(config)
-        judge_extraction_records(config, judge, artifacts)
+        judge_extraction_records(
+            config, judge, artifacts, traits=args.traits, append=args.append
+        )
         return 0
 
     if args.command == "extract-vectors":
@@ -101,7 +112,7 @@ def main(argv: list[str] | None = None) -> int:
         from .runtime import ModelRuntime
 
         runtime = ModelRuntime(config)
-        extract_trait_vectors(config, runtime)
+        extract_trait_vectors(config, runtime, traits=args.traits)
         return 0
 
     if args.command == "normalize":
