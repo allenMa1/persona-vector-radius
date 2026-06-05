@@ -1,0 +1,10 @@
+{
+  "evil": {
+    "num_pairs": 5,
+    "path": "runs/qwen25_7b_layer20_response/vectors/evil_response_avg_diff.pt",
+    "shape": [
+      28,
+      3584
+    ]
+  }
+}
