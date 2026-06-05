@@ -1,0 +1,22 @@
+{
+  "coherence_threshold": 70,
+  "diameters": [
+    {
+      "beta_high": null,
+      "beta_low": null,
+      "diameter": 0.0,
+      "trait_id": "sycophancy",
+      "trait_score_slope": 0.0,
+      "vector_type": "random"
+    },
+    {
+      "beta_high": null,
+      "beta_low": null,
+      "diameter": 0.0,
+      "trait_id": "sycophancy",
+      "trait_score_slope": 1.3992384068103667,
+      "vector_type": "trait"
+    }
+  ],
+  "num_records": 240
+}
