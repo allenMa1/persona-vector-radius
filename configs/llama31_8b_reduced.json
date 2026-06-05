@@ -1,0 +1,26 @@
+{
+  "model_id": "meta-llama/Meta-Llama-3.1-8B-Instruct",
+  "device": "cuda",
+  "dtype": "bfloat16",
+  "traits": ["sycophancy", "hallucination", "evil"],
+  "steering_layer": 23,
+  "hook_point": "block_output",
+  "beta_grid": [-5, -2, 0, 2, 5],
+  "max_new_tokens": 180,
+  "do_sample": false,
+  "temperature": 0.0,
+  "top_p": 1.0,
+  "seed": 0,
+  "coherence_threshold": 70,
+  "extraction_coherence_threshold": 60,
+  "trait_positive_threshold": 50,
+  "trait_negative_threshold": 50,
+  "min_pairs_per_trait": 4,
+  "judge_model": "openai/gpt-4.1-mini",
+  "artifact_generator_model": "anthropic/claude-3.7-sonnet",
+  "openrouter_base_url": "https://openrouter.ai/api/v1",
+  "cache_dir": "cache",
+  "artifact_dir": "artifacts",
+  "run_dir": "runs/llama31_8b_layer23_response"
+}
+

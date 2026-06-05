@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import time
 from dataclasses import dataclass
 from typing import Any
 
@@ -17,6 +18,7 @@ class OpenRouterClient:
     base_url: str = "https://openrouter.ai/api/v1"
     api_key_env: str = "OPENROUTER_API_KEY"
     app_name: str = "trait-steering-tolerance"
+    max_retries: int = 5
 
     def _client(self):
         api_key = os.environ.get(self.api_key_env)
@@ -43,12 +45,25 @@ class OpenRouterClient:
         max_tokens: int = 1024,
         temperature: float = 0.0,
     ) -> str:
-        response = self._client().chat.completions.create(
-            model=self.model,
-            messages=messages,
-            max_tokens=max_tokens,
-            temperature=temperature,
-        )
+        client = self._client()
+        last_exc: Exception | None = None
+        for attempt in range(self.max_retries):
+            try:
+                response = client.chat.completions.create(
+                    model=self.model,
+                    messages=messages,
+                    max_tokens=max_tokens,
+                    temperature=temperature,
+                )
+                break
+            except Exception as exc:
+                last_exc = exc
+                if attempt == self.max_retries - 1:
+                    raise
+                delay = min(30.0, 2.0 * (2**attempt))
+                time.sleep(delay)
+        else:
+            raise LLMClientError("OpenRouter request failed.") from last_exc
         content = response.choices[0].message.content
         if content is None:
             raise LLMClientError("Model returned no text content.")
@@ -82,4 +97,3 @@ def parse_json_object(text: str) -> dict[str, Any]:
     if not isinstance(value, dict):
         raise LLMClientError("Expected a JSON object.")
     return value
-
