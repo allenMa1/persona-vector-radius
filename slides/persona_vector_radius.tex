@@ -5,8 +5,11 @@
 \setbeamertemplate{footline}[frame number]
 
 \usepackage{booktabs}
+\usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage{xcolor}
+
+\graphicspath{{figures/}}
 
 \title[Persona Vector Radius]{Persona Vector Radius}
 \subtitle{How far can persona-vector steering go before coherence breaks?}
@@ -78,24 +81,28 @@
 \end{frame}
 
 \begin{frame}{Main Result: Qwen2.5-7B}
-  \begin{table}
-    \centering
-    \large
-    \begin{tabular}{lccc}
-      \toprule
-      Direction & Coherent interval & Diameter & Ratio vs random \\
-      \midrule
-      hallucination vector & $[-8, 8]$ & 16 & 0.125 \\
-      evil vector & $[-16, 8]$ & 24 & 0.188 \\
-      sycophancy vector & $[-24, 16]$ & 40 & 0.313 \\
-      random controls & $[-64, 64]$ & 128 & 1.000 \\
-      \bottomrule
-    \end{tabular}
-  \end{table}
-
-  \vspace{1em}
-  \Large
-  \textbf{Result:} trait directions break coherence much earlier than random directions.
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.53\textwidth}
+      \begin{table}
+        \centering
+        \begin{tabular}{lccc}
+          \toprule
+          Direction & Interval & Diameter & Ratio \\
+          \midrule
+          hallucination & $[-8, 8]$ & 16 & 0.125 \\
+          evil & $[-16, 8]$ & 24 & 0.188 \\
+          sycophancy & $[-24, 16]$ & 40 & 0.313 \\
+          random & $[-64, 64]$ & 128 & 1.000 \\
+          \bottomrule
+        \end{tabular}
+      \end{table}
+      \vspace{0.4em}
+      \textbf{Result:} trait directions break coherence much earlier than random directions.
+    \end{column}
+    \begin{column}{0.43\textwidth}
+      \includegraphics[width=\linewidth]{fig_qwen7_diameter_ratios.png}
+    \end{column}
+  \end{columns}
 \end{frame}
 
 \begin{frame}{What This Means}
@@ -125,27 +132,31 @@
 \end{frame}
 
 \begin{frame}{Cross-Model Check: Qwen2.5-3B}
-  \begin{table}
-    \centering
-    \large
-    \begin{tabular}{lccc}
-      \toprule
-      Direction & Qwen7 diameter & Qwen3 diameter & Same pattern? \\
-      \midrule
-      hallucination vector & 16 & 32 & yes \\
-      evil vector & 24 & 48 & yes \\
-      sycophancy vector & 40 & 48 & yes \\
-      random controls & 128 & 128 & yes \\
-      \bottomrule
-    \end{tabular}
-  \end{table}
-
-  \vspace{1em}
-  \begin{itemize}
-    \item Qualitative pattern transfers across model size.
-    \item Exact radii differ, so normalized diameter is not automatically model-invariant.
-    \item Hallucination is the tightest direction in both models.
-  \end{itemize}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.52\textwidth}
+      \begin{table}
+        \centering
+        \begin{tabular}{lcc}
+          \toprule
+          Direction & Qwen7 & Qwen3 \\
+          \midrule
+          hallucination & 16 & 32 \\
+          evil & 24 & 48 \\
+          sycophancy & 40 & 48 \\
+          random & 128 & 128 \\
+          \bottomrule
+        \end{tabular}
+      \end{table}
+      \begin{itemize}
+        \item Same qualitative pattern transfers.
+        \item Exact radii differ across model scale.
+        \item Hallucination is tightest in both.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.44\textwidth}
+      \includegraphics[width=\linewidth]{fig_qwen3_comparison.png}
+    \end{column}
+  \end{columns}
 \end{frame}
 
 \begin{frame}{Fine Boundary Checks}
