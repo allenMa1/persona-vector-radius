@@ -27,6 +27,7 @@ class RunConfig:
     top_p: float = 1.0
     seed: int = 0
     coherence_threshold: int = 70
+    extraction_coherence_threshold: int = 60
     trait_positive_threshold: int = 50
     trait_negative_threshold: int = 50
     min_pairs_per_trait: int = 4
@@ -104,4 +105,3 @@ def config_summary(config: RunConfig) -> dict[str, Any]:
         "beta_grid": config.beta_grid,
         "run_dir": config.run_dir,
     }
-

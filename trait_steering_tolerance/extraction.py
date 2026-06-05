@@ -120,9 +120,9 @@ def retained_pairs(config: RunConfig) -> dict[str, list[dict[str, dict[str, Any]
         neg = pair.get("negative")
         if pos is None or neg is None:
             continue
-        if pos["coherence_score"] < config.coherence_threshold:
+        if pos["coherence_score"] < config.extraction_coherence_threshold:
             continue
-        if neg["coherence_score"] < config.coherence_threshold:
+        if neg["coherence_score"] < config.extraction_coherence_threshold:
             continue
         if pos["trait_score"] <= config.trait_positive_threshold:
             continue

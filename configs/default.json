@@ -12,6 +12,7 @@
   "top_p": 1.0,
   "seed": 0,
   "coherence_threshold": 70,
+  "extraction_coherence_threshold": 60,
   "trait_positive_threshold": 50,
   "trait_negative_threshold": 50,
   "min_pairs_per_trait": 4,
@@ -22,4 +23,3 @@
   "artifact_dir": "artifacts",
   "run_dir": "runs/qwen25_7b_layer20_response"
 }
-

@@ -65,6 +65,8 @@ tst --config configs/default.json judge-extraction --traits evil --append
 tst --config configs/default.json extract-vectors --traits evil
 ```
 
+Vector extraction uses `extraction_coherence_threshold` from config, while final diameter analysis uses `coherence_threshold`. This lets extraction keep legible contrastive examples without weakening the final coherence metric.
+
 Then continue:
 
 ```bash
