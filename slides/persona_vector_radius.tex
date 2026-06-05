@@ -161,15 +161,15 @@
 
 \begin{frame}{Takeaways}
   \begin{enumerate}
-    \item Persona-vector steering has an empirical coherence radius.
-    \item Trait vectors are less tolerant than random controls under the same normalization.
-    \item Different traits have different radii; hallucination is tightest here.
-    \item The phenomenon appears in both Qwen2.5-7B and Qwen2.5-3B.
+    \item Persona vectors have empirical diameters: steering can work, then break coherence.
+    \item Trait vectors are more fragile than same-normalization random controls in both Qwen7 and Qwen3.
+    \item Hallucination was least robust; sycophancy and evil were more tolerant, suggesting trait-specific sensitivity.
+    \item Exact numbers are noisy: small extraction sets, one layer, and LLM judges make this a first-pass behavioral estimate.
   \end{enumerate}
 
   \vspace{1em}
   \begin{block}{Limitations}
-    LLM judge metrics, grid-based radius estimate, small retained-pair counts, one layer/hook point, and no mechanistic proof yet.
+    Behavioral evidence, not a mechanistic proof.
   \end{block}
 \end{frame}
 
