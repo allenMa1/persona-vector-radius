@@ -1,0 +1,3 @@
+trait_id,vector_type,beta_low,beta_high,diameter,trait_score_slope
+hallucination,random,,,0.0,-0.020895522388059865
+hallucination,trait,,,0.0,1.8905472636815912

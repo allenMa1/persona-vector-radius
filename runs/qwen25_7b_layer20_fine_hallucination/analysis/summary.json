@@ -1,0 +1,22 @@
+{
+  "coherence_threshold": 70,
+  "diameters": [
+    {
+      "beta_high": null,
+      "beta_low": null,
+      "diameter": 0.0,
+      "trait_id": "hallucination",
+      "trait_score_slope": -0.020895522388059865,
+      "vector_type": "random"
+    },
+    {
+      "beta_high": null,
+      "beta_low": null,
+      "diameter": 0.0,
+      "trait_id": "hallucination",
+      "trait_score_slope": 1.8905472636815912,
+      "vector_type": "trait"
+    }
+  ],
+  "num_records": 240
+}
