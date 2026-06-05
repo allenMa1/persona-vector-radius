@@ -190,6 +190,28 @@ optional Qwen3 / broader geometry outputs if present
 
 No GPU or API key is needed to run the notebook.
 
+## Presentation
+
+The 5-minute Beamer slide deck is:
+
+```text
+slides/persona_vector_radius.tex
+```
+
+It uses figures exported by the analysis notebook from:
+
+```text
+notebooks/figures/
+```
+
+Compile with:
+
+```bash
+cd slides
+pdflatex persona_vector_radius.tex
+pdflatex persona_vector_radius.tex
+```
+
 ## Additional Experiments
 
 Implemented configs include:
