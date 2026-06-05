@@ -159,29 +159,6 @@
   \end{columns}
 \end{frame}
 
-\begin{frame}{Fine Boundary Checks}
-  \begin{table}
-    \centering
-    \large
-    \begin{tabular}{lcc}
-      \toprule
-      Trait & Coarse interval & Fine-sweep update \\
-      \midrule
-      hallucination & $[-8, 8]$ & fails by $\pm 11$ \\
-      evil & $[-16, 8]$ & approx. $[-19, 14]$ \\
-      sycophancy & $[-24, 16]$ & near $-24$, fails between $16$ and $19$ \\
-      \bottomrule
-    \end{tabular}
-  \end{table}
-
-  \vspace{1em}
-  \begin{itemize}
-    \item Main diameters are grid-based estimates, not exact continuous radii.
-    \item Fine sweeps probe around boundary points.
-    \item Fine grids omit 0, so they refine boundaries but do not redefine the official metric.
-  \end{itemize}
-\end{frame}
-
 \begin{frame}{Takeaways}
   \begin{enumerate}
     \item Persona-vector steering has an empirical coherence radius.
@@ -192,42 +169,8 @@
 
   \vspace{1em}
   \begin{block}{Limitations}
-    LLM judge metrics, small retained-pair counts, one layer/hook point, generated artifacts, and no mechanistic proof yet.
+    LLM judge metrics, grid-based radius estimate, small retained-pair counts, one layer/hook point, and no mechanistic proof yet.
   \end{block}
-\end{frame}
-
-\appendix
-
-\begin{frame}{Backup: Geometry}
-  \begin{itemize}
-    \item Within-model cosine similarities among the three core vectors were mostly near orthogonal.
-    \item Qwen7 had weak structure:
-      \[
-      \cos(\text{evil}, \text{hallucination}) = 0.145,\quad
-      \cos(\text{evil}, \text{sycophancy}) = -0.231
-      \]
-    \item Qwen3 was flatter:
-      \[
-      \cos(\text{evil}, \text{hallucination}) = 0.055,\quad
-      \cos(\text{evil}, \text{sycophancy}) = 0.015
-      \]
-    \item Cross-model vector cosines are not meaningful directly because residual spaces are not aligned.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Backup: Failure Modes}
-  Coherence failures usually looked like:
-
-  \vspace{0.5em}
-  \begin{itemize}
-    \item repetitive phrasing or loops,
-    \item abrupt loss of relevance,
-    \item overexpression of the target trait,
-    \item strange formatting or very short degenerate completions.
-  \end{itemize}
-
-  \vspace{1em}
-  This is why the main metric uses behavioral coherence rather than just activation projection.
 \end{frame}
 
 \end{document}
