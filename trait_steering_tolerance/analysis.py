@@ -97,12 +97,30 @@ def analyze_results(config: RunConfig) -> None:
     _plot_curves(config, grouped)
 
 
-def _write_cosine_similarity(config: RunConfig) -> None:
+def analyze_geometry(config: RunConfig) -> None:
+    ensure_dir(config.analysis_dir)
+    cosine_traits = _write_cosine_similarity(config)
+    _plot_cosine_similarity(config)
+    write_json(
+        config.analysis_dir / "geometry_summary.json",
+        {
+            "model_id": config.model_id,
+            "steering_layer": config.steering_layer,
+            "num_vectors": len(cosine_traits),
+            "traits": cosine_traits,
+            "missing_config_traits": [
+                trait_id for trait_id in config.traits if trait_id not in set(cosine_traits)
+            ],
+        },
+    )
+
+
+def _write_cosine_similarity(config: RunConfig) -> list[str]:
     try:
         import pandas as pd
         import torch
     except ImportError:
-        return
+        return []
 
     vectors: dict[str, object] = {}
     for path in sorted(config.vectors_dir.glob("*_response_avg_diff.pt")):
@@ -117,7 +135,7 @@ def _write_cosine_similarity(config: RunConfig) -> None:
             continue
         vectors[trait_id] = vector / norm
     if len(vectors) < 2:
-        return
+        return sorted(vectors)
     trait_ids = sorted(vectors)
     rows = []
     for left in trait_ids:
@@ -127,6 +145,7 @@ def _write_cosine_similarity(config: RunConfig) -> None:
         rows.append(row)
     cosine_df = pd.DataFrame(rows)
     cosine_df.to_csv(config.analysis_dir / "trait_cosine_similarity.csv", index=False)
+    return trait_ids
 
 
 def _plot_curves(config: RunConfig, grouped) -> None:
@@ -173,14 +192,28 @@ def _plot_curves(config: RunConfig, grouped) -> None:
 
     cosine_path = Path(config.analysis_dir) / "trait_cosine_similarity.csv"
     if cosine_path.exists():
-        cosine_df = pd.read_csv(cosine_path)
-        trait_ids = cosine_df["trait_id"].tolist()
-        matrix = cosine_df[trait_ids].to_numpy()
-        fig, ax = plt.subplots(figsize=(6, 5))
-        image = ax.imshow(matrix, vmin=-1, vmax=1, cmap="coolwarm")
-        ax.set_xticks(range(len(trait_ids)), trait_ids, rotation=45, ha="right")
-        ax.set_yticks(range(len(trait_ids)), trait_ids)
-        fig.colorbar(image, ax=ax, label="cosine similarity")
-        fig.tight_layout()
-        fig.savefig(Path(config.analysis_dir) / "trait_cosine_similarity.png", dpi=180)
-        plt.close(fig)
+        _plot_cosine_similarity(config)
+
+
+def _plot_cosine_similarity(config: RunConfig) -> None:
+    try:
+        import matplotlib.pyplot as plt
+        import pandas as pd
+    except ImportError:
+        return
+
+    cosine_path = Path(config.analysis_dir) / "trait_cosine_similarity.csv"
+    if not cosine_path.exists():
+        return
+    cosine_df = pd.read_csv(cosine_path)
+    trait_ids = cosine_df["trait_id"].tolist()
+    matrix = cosine_df[trait_ids].to_numpy()
+    size = max(6, min(12, 0.55 * len(trait_ids)))
+    fig, ax = plt.subplots(figsize=(size, size))
+    image = ax.imshow(matrix, vmin=-1, vmax=1, cmap="coolwarm")
+    ax.set_xticks(range(len(trait_ids)), trait_ids, rotation=45, ha="right")
+    ax.set_yticks(range(len(trait_ids)), trait_ids)
+    fig.colorbar(image, ax=ax, label="cosine similarity")
+    fig.tight_layout()
+    fig.savefig(Path(config.analysis_dir) / "trait_cosine_similarity.png", dpi=180)
+    plt.close(fig)

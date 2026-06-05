@@ -136,6 +136,7 @@ def extract_trait_vectors(
     config: RunConfig,
     runtime: ModelRuntime,
     traits: list[str] | None = None,
+    skip_failed: bool = False,
 ) -> None:
     import torch
 
@@ -146,10 +147,19 @@ def extract_trait_vectors(
     for trait_id in target_traits:
         pairs = retained.get(trait_id, [])
         if len(pairs) < config.min_pairs_per_trait:
-            raise RuntimeError(
+            message = (
                 f"Only retained {len(pairs)} pairs for {trait_id}; "
                 f"minimum is {config.min_pairs_per_trait}."
             )
+            if skip_failed:
+                metadata[trait_id] = {
+                    "num_pairs": len(pairs),
+                    "skipped": True,
+                    "reason": message,
+                }
+                print(f"Skipping {trait_id}: {message}")
+                continue
+            raise RuntimeError(message)
         pos_sum = None
         neg_sum = None
         for pair in tqdm(pairs, desc=f"vectors {trait_id}"):

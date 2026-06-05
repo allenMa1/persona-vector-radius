@@ -31,9 +31,11 @@ def main(argv: list[str] | None = None) -> int:
 
     extract_vectors = sub.add_parser("extract-vectors")
     extract_vectors.add_argument("--traits", nargs="*", default=None)
+    extract_vectors.add_argument("--skip-failed", action="store_true")
     sub.add_parser("normalize")
     sub.add_parser("evaluate")
     sub.add_parser("analyze")
+    sub.add_parser("analyze-geometry")
 
     gen_artifacts = sub.add_parser("generate-artifacts")
     gen_artifacts.add_argument("--traits", nargs="*", default=None)
@@ -112,7 +114,9 @@ def main(argv: list[str] | None = None) -> int:
         from .runtime import ModelRuntime
 
         runtime = ModelRuntime(config)
-        extract_trait_vectors(config, runtime, traits=args.traits)
+        extract_trait_vectors(
+            config, runtime, traits=args.traits, skip_failed=args.skip_failed
+        )
         return 0
 
     if args.command == "normalize":
@@ -142,6 +146,12 @@ def main(argv: list[str] | None = None) -> int:
         from .analysis import analyze_results
 
         analyze_results(config)
+        return 0
+
+    if args.command == "analyze-geometry":
+        from .analysis import analyze_geometry
+
+        analyze_geometry(config)
         return 0
 
     parser.error(f"Unknown command: {args.command}")
