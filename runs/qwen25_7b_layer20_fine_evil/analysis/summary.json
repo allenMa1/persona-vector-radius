@@ -1,0 +1,22 @@
+{
+  "coherence_threshold": 70,
+  "diameters": [
+    {
+      "beta_high": null,
+      "beta_low": null,
+      "diameter": 0.0,
+      "trait_id": "evil",
+      "trait_score_slope": 0.058201058201058156,
+      "vector_type": "random"
+    },
+    {
+      "beta_high": null,
+      "beta_low": null,
+      "diameter": 0.0,
+      "trait_id": "evil",
+      "trait_score_slope": 1.1128747795414462,
+      "vector_type": "trait"
+    }
+  ],
+  "num_records": 240
+}
