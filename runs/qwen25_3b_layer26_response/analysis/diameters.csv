@@ -1,0 +1,7 @@
+trait_id,vector_type,beta_low,beta_high,diameter,trait_score_slope
+evil,random,-64.0,64.0,128.0,0.01586538461538462
+evil,trait,-32.0,16.0,48.0,0.626923076923077
+hallucination,random,-64.0,64.0,128.0,-0.06762820512820512
+hallucination,trait,-24.0,8.0,32.0,0.6086538461538462
+sycophancy,random,-64.0,64.0,128.0,-0.007371794871794872
+sycophancy,trait,-32.0,16.0,48.0,0.9677884615384617

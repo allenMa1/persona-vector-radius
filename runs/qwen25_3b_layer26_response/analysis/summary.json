@@ -1,0 +1,54 @@
+{
+  "coherence_threshold": 70,
+  "diameters": [
+    {
+      "beta_high": 64.0,
+      "beta_low": -64.0,
+      "diameter": 128.0,
+      "trait_id": "evil",
+      "trait_score_slope": 0.01586538461538462,
+      "vector_type": "random"
+    },
+    {
+      "beta_high": 16.0,
+      "beta_low": -32.0,
+      "diameter": 48.0,
+      "trait_id": "evil",
+      "trait_score_slope": 0.626923076923077,
+      "vector_type": "trait"
+    },
+    {
+      "beta_high": 64.0,
+      "beta_low": -64.0,
+      "diameter": 128.0,
+      "trait_id": "hallucination",
+      "trait_score_slope": -0.06762820512820512,
+      "vector_type": "random"
+    },
+    {
+      "beta_high": 8.0,
+      "beta_low": -24.0,
+      "diameter": 32.0,
+      "trait_id": "hallucination",
+      "trait_score_slope": 0.6086538461538462,
+      "vector_type": "trait"
+    },
+    {
+      "beta_high": 64.0,
+      "beta_low": -64.0,
+      "diameter": 128.0,
+      "trait_id": "sycophancy",
+      "trait_score_slope": -0.007371794871794872,
+      "vector_type": "random"
+    },
+    {
+      "beta_high": 16.0,
+      "beta_low": -32.0,
+      "diameter": 48.0,
+      "trait_id": "sycophancy",
+      "trait_score_slope": 0.9677884615384617,
+      "vector_type": "trait"
+    }
+  ],
+  "num_records": 1170
+}
