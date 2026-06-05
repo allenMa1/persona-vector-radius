@@ -63,7 +63,7 @@ def main(argv: list[str] | None = None) -> int:
                 {"role": "system", "content": "Return only the word ok."},
                 {"role": "user", "content": "Smoke test."},
             ],
-            max_tokens=8,
+            max_tokens=32,
         )
         print(text)
         return 0
