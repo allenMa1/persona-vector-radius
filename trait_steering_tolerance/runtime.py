@@ -50,6 +50,7 @@ class ModelRuntime:
         load_kwargs = {
             "torch_dtype": dtype,
             "trust_remote_code": True,
+            "low_cpu_mem_usage": True,
         }
         if self.config.device == "cuda":
             load_kwargs["device_map"] = "auto"
